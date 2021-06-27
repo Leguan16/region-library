@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'me.ratsiel'
+version '0.1'
+
+repositories {
+    mavenCentral()
+    repositories {
+        maven {
+            url "http://repo.ratsiel.me"
+        }
+    }
+}
+
+dependencies {
+    compile group: 'me.ratsiel', name: 'nbt-library', version: '0.1'
+}
+
