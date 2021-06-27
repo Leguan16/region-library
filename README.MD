@@ -1,4 +1,4 @@
-![](https://github.com/Ratsiiel/region-library/actions/workflows/gradle.yml/badge.svg)
+[![Java CI with Gradle](https://github.com/Ratsiiel/region-library/actions/workflows/gradle.yml/badge.svg?branch=master)](https://github.com/Ratsiiel/region-library/actions/workflows/gradle.yml)
 
 # region-library
 
