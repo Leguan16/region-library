@@ -18,3 +18,8 @@ dependencies {
     compile group: 'me.ratsiel', name: 'nbt-library', version: '0.1'
 }
 
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
