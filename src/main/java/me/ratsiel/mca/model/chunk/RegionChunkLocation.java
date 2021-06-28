@@ -1,11 +1,11 @@
 package me.ratsiel.mca.model.chunk;
 
-public class ChunkLocation {
+public class RegionChunkLocation {
 
     private final int chunkOffset;
     private final int sector;
 
-    public ChunkLocation(int chunkOffset, int sector) {
+    public RegionChunkLocation(int chunkOffset, int sector) {
         this.chunkOffset = chunkOffset;
         this.sector = sector;
     }

@@ -1,8 +1,8 @@
 package me.ratsiel.mca.model;
 
 import me.ratsiel.mca.enums.CompressionType;
-import me.ratsiel.mca.model.chunk.ChunkLocation;
-import me.ratsiel.mca.model.chunk.Chunk;
+import me.ratsiel.mca.model.chunk.RegionChunkLocation;
+import me.ratsiel.mca.model.chunk.RegionChunk;
 import me.ratsiel.nbt.NBTFactory;
 import me.ratsiel.nbt.model.CompoundTag;
 
@@ -16,16 +16,26 @@ import java.util.zip.InflaterInputStream;
 
 public class RegionFile {
 
+
     private int x;
     private int z;
-    private final List<Chunk> chunks = new ArrayList<>();
+    private final File file;
+    private final List<RegionChunk> regionChunkData = new ArrayList<>();
 
     /**
      * Creates a object of {@link RegionFile}
      * @param file input of {@link File}
      * @throws IOException if something went wrong
      */
-    public RegionFile(File file) throws IOException {
+    public RegionFile(File file) {
+        this.file = file;
+    }
+
+    /**
+     * Loads region data from file
+     * @throws IOException if something went wrong
+     */
+    public void load() throws IOException {
         FileInputStream inputStream = new FileInputStream(file);
 
         String[] strings = file.getName().split("\\.");
@@ -53,7 +63,7 @@ public class RegionFile {
             int offset = ((offsetBytes[0] & 0xF) << 16) | ((offsetBytes[1] & 0xFF) << 8) | (offsetBytes[2] & 0xFF);;
             int sector = bytes[3];
             if(isValidChunkData(bytes)) {
-                regionFileHeader.getChunkLocations()[i] = new ChunkLocation(offset, sector);
+                regionFileHeader.getChunkLocations()[i] = new RegionChunkLocation(offset, sector);
             }
 
         }
@@ -71,14 +81,14 @@ public class RegionFile {
 
         // Read all chunks by RegionFileHeader.CHUNKS_PER_REGION.
         for (int i = 0; i < RegionFileHeader.CHUNKS_PER_REGION; i++) {
-            ChunkLocation chunkLocation = regionFileHeader.getChunkLocations()[i];
+            RegionChunkLocation regionChunkLocation = regionFileHeader.getChunkLocations()[i];
 
-            if(chunkLocation == null) {
+            if(regionChunkLocation == null) {
                 continue;
             }
 
-            int offset = chunkLocation.getChunkOffset();
-            int sector = chunkLocation.getSector();
+            int offset = regionChunkLocation.getChunkOffset();
+            int sector = regionChunkLocation.getSector();
 
             if(offset != 0) {
                 // Jump to given chunk offset in file!
@@ -115,10 +125,11 @@ public class RegionFile {
                 CompoundTag levelTag = compoundTag.get("Level");
 
                 // Add Chunk with levelTag to chunks
-                chunks.add(new Chunk(levelTag));
+                this.regionChunkData.add(new RegionChunk(levelTag));
             }
         }
     }
+
 
     /**
      * Decompressed given data if is compressed by {@link CompressionType}
@@ -178,7 +189,7 @@ public class RegionFile {
         return z;
     }
 
-    public List<Chunk> getChunks() {
-        return chunks;
+    public List<RegionChunk> getChunks() {
+        return regionChunkData;
     }
 }

@@ -16,7 +16,9 @@ public class RegionFactory {
      * @throws IOException if something went wrong
      */
     public static RegionFile loadRegion(File file) throws IOException {
-        return new RegionFile(file);
+        RegionFile regionFile = new RegionFile(file);
+        regionFile.load();
+        return regionFile;
     }
 
 

@@ -3,13 +3,13 @@ package me.ratsiel.mca.model.chunk;
 import me.ratsiel.nbt.model.CompoundTag;
 import me.ratsiel.nbt.model.values.CompoundInt;
 
-public class Chunk {
+public class RegionChunk {
 
     private final int x;
     private final int z;
     private final CompoundTag levelData;
 
-    public Chunk(CompoundTag levelData) {
+    public RegionChunk(CompoundTag levelData) {
         this.levelData = levelData;
         x = levelData.get("xPos", CompoundInt.class).getValue();
         z = levelData.get("zPos", CompoundInt.class).getValue();
